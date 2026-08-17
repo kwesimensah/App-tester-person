@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Field Test Ticket — App QA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Special+Elite&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --kraft:#d8c7a1;
+    --kraft-dark:#c4b088;
+    --paper:#efe6cf;
+    --paper-line:#c9b98e;
+    --ink:#2c2a26;
+    --ink-soft:#5a5548;
+    --stamp-red:#a33529;
+    --stamp-green:#3f6b46;
+    --stamp-amber:#a8781f;
+    --carbon:#6b6357;
+    --clip:#8a8378;
+    --mono:'Space Mono', monospace;
+    --type:'Special Elite', monospace;
+    --sans:'Archivo', system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--kraft);
+    color:var(--ink);
+    font-family:var(--sans);
+    padding-bottom:70px;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(44,42,38,0.09) 1px, transparent 0);
+    background-size:16px 16px;
+  }
+
+  /* ===== Header: clipboard ticket ===== */
+  .clipboard-top{
+    display:flex;
+    justify-content:center;
+    padding-top:14px;
+  }
+  .clip{
+    width:70px;
+    height:26px;
+    background:linear-gradient(180deg,#a39a86,var(--clip));
+    border-radius:6px 6px 3px 3px;
+    box-shadow:0 3px 4px rgba(0,0,0,0.25) inset, 0 2px 3px rgba(0,0,0,0.3);
+    position:relative;
+    z-index:2;
+    margin-bottom:-14px;
+  }
+  .clip::after{
+    content:'';
+    position:absolute;
+    top:8px; left:50%;
+    transform:translateX(-50%);
+    width:34px; height:8px;
+    border-radius:4px;
+    background:rgba(0,0,0,0.22);
+  }
+
+  header{
+    max-width:760px;
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:26px 22px 20px;
+    position:relative;
+    box-shadow:0 10px 24px rgba(44,42,38,0.18);
+  }
+  header::before{
+    content:'FIELD TEST TICKET';
+    position:absolute;
+    top:14px;
+    right:18px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.14em;
+    color:var(--carbon);
+    border:1px solid var(--carbon);
+    padding:3px 7px;
+    border-radius:3px;
+    transform:rotate(3deg);
+    opacity:0.75;
+  }
+  .form-no{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    margin-bottom:8px;
+  }
+  header h1{
+    font-family:var(--type);
+    font-weight:400;
+    font-size:24px;
+    margin:0 0 8px;
+    line-height:1.25;
+    letter-spacing:0.01em;
+    max-width:85%;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    line-height:1.55;
+    max-width:560px;
+  }
+
+  .meta-grid{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+    border-top:1px dashed var(--paper-line);
+    padding-top:16px;
+  }
+  .meta-field{display:flex; flex-direction:column; gap:4px;}
+  .meta-field label{
+    font-family:var(--mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--ink-soft);
+  }
+  .meta-field input{
+    background:transparent;
+    border:none;
+    border-bottom:1.5px solid var(--paper-line);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:14px;
+    padding:4px 2px 6px;
+    width:100%;
+  }
+  .meta-field input:focus{outline:none; border-bottom-color:var(--ink);}
+
+  main{
+    max-width:760px;
+    margin:0 auto;
+    padding:22px 16px 0;
+  }
+
+  /* ===== Card: carbon-copy ticket ===== */
+  .card{
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:3px;
+    margin-bottom:20px;
+    position:relative;
+    box-shadow:3px 3px 0 rgba(44,42,38,0.12);
+  }
+  .card::before{ /* carbon peek */
+    content:'';
+    position:absolute;
+    top:5px; left:5px; right:-5px; bottom:-5px;
+    background:var(--carbon);
+    opacity:0.14;
+    border-radius:3px;
+    z-index:-1;
+  }
+  .card-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    padding:16px 18px 12px;
+    border-bottom:1px dashed var(--paper-line);
+  }
+  .num{
+    font-family:var(--type);
+    font-size:20px;
+    color:var(--carbon);
+    flex-shrink:0;
+    line-height:1;
+  }
+  .card-head h2{
+    margin:0;
+    font-size:14.5px;
+    font-weight:600;
+    line-height:1.42;
+    color:var(--ink);
+  }
+  .card-body{
+    padding:16px 18px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+  }
+
+  /* ===== Timer ===== */
+  .timer-unit{display:flex; flex-direction:column; gap:8px;}
+  .timer-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--ink-soft);
+  }
+  .timer-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .timer-display{
+    font-family:var(--mono);
+    font-size:25px;
+    font-weight:700;
+    color:var(--ink);
+    background:#fffef8;
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    padding:6px 12px;
+    min-width:118px;
+    text-align:center;
+    letter-spacing:0.02em;
+  }
+  .timer-display.running{
+    color:var(--stamp-green);
+    border-color:var(--stamp-green);
+  }
+  .btn-group{display:flex; gap:8px; flex-wrap:wrap;}
+
+  button{
+    font-family:var(--mono);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:0.03em;
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    padding:9px 14px;
+    cursor:pointer;
+    background:transparent;
+    color:var(--ink);
+    transition:transform .08s ease, opacity .15s ease;
+    min-height:40px;
+  }
+  button:active{transform:scale(0.96);}
+  .btn-start{background:var(--ink); color:var(--paper);}
+  .btn-stop{border-color:var(--stamp-red); color:var(--stamp-red);}
+  .btn-reset{border-color:var(--paper-line); color:var(--ink-soft);}
+  .btn-log{
+    background:var(--stamp-amber);
+    border-color:var(--stamp-amber);
+    color:#fff8ea;
+    width:100%;
+    padding:11px 14px;
+    font-size:12.5px;
+  }
+  button:disabled{opacity:0.3; cursor:not-allowed;}
+
+  /* ===== Verdict stamps ===== */
+  .stamp-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .stamp{
+    font-family:var(--type);
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:4px;
+    border:2px solid var(--ink-soft);
+    color:var(--ink-soft);
+    background:transparent;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    flex:1;
+    min-width:100px;
+    text-align:center;
+  }
+  .stamp.sel-pass{border-color:var(--stamp-green); color:var(--stamp-green); transform:rotate(-2deg); background:rgba(63,107,70,0.08);}
+  .stamp.sel-partial{border-color:var(--stamp-amber); color:var(--stamp-amber); transform:rotate(1deg); background:rgba(168,120,31,0.08);}
+  .stamp.sel-fail{border-color:var(--stamp-red); color:var(--stamp-red); transform:rotate(-1deg); background:rgba(163,53,41,0.08);}
+
+  textarea{
+    width:100%;
+    background:#fffef8;
+    border:1.5px solid var(--paper-line);
+    color:var(--ink);
+    border-radius:4px;
+    padding:10px 11px;
+    font-family:var(--sans);
+    font-size:13.5px;
+    resize:vertical;
+    min-height:44px;
+  }
+  textarea:focus{outline:none; border-color:var(--ink);}
+  textarea::placeholder{color:#a89f8a;}
+
+  .status-line{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+    min-height:14px;
+  }
+  .status-line .ok{color:var(--stamp-green); font-weight:700;}
+
+  .split-two{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  /* ===== Log / receipt tear ===== */
+  .tear{
+    max-width:760px;
+    margin:26px auto 0;
+    padding:0 16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .tear .line{
+    flex:1;
+    border-top:2px dashed var(--carbon);
+    opacity:0.5;
+  }
+  .tear span{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--carbon);
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+  }
+
+  .log-section{
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 16px 0;
+  }
+  .log-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .log-head h2{
+    font-family:var(--type);
+    font-size:17px;
+    margin:0;
+    font-weight:400;
+  }
+  .log-actions{display:flex; gap:8px;}
+  .export-btn{background:var(--ink); color:var(--paper);}
+  .clear-btn{border-color:var(--paper-line); color:var(--ink-soft); font-size:11px; padding:8px 12px; min-height:36px;}
+
+  .empty-log{
+    color:var(--ink-soft);
+    font-size:13px;
+    font-family:var(--mono);
+    padding:20px 4px 30px;
+    border-top:1px dashed var(--paper-line);
+  }
+
+  /* Log entries as stacked receipt slips (mobile-first) */
+  .entry{
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-radius:3px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    box-shadow:2px 2px 0 rgba(44,42,38,0.1);
+  }
+  .entry-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .entry-crit{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .entry-time{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .entry-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 14px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .entry-row b{color:var(--ink); font-weight:700;}
+  .entry-verdict{
+    display:inline-block;
+    font-family:var(--type);
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:3px;
+    text-transform:uppercase;
+    border:1.5px solid currentColor;
+  }
+  .v-pass{color:var(--stamp-green);}
+  .v-partial{color:var(--stamp-amber);}
+  .v-fail{color:var(--stamp-red);}
+  .v-none{color:var(--ink-soft);}
+  .entry-notes{
+    font-size:12.5px;
+    color:var(--ink);
+    line-height:1.5;
+    border-top:1px dashed var(--paper-line);
+    padding-top:6px;
+    margin-top:4px;
+  }
+
+  footer{
+    max-width:760px;
+    margin:30px auto 0;
+    padding:16px;
+    color:var(--carbon);
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-align:center;
+    letter-spacing:0.05em;
+  }
+
+  /* ===== Mobile ===== */
+  @media (max-width:600px){
+    header{padding:22px 16px 18px; border-radius:0; margin:0 -0px;}
+    header::before{
+      position:static;
+      display:inline-block;
+      margin-bottom:10px;
+      transform:none;
+    }
+    header h1{font-size:19px; max-width:100%;}
+    .meta-grid{grid-template-columns:1fr;}
+    main{padding:18px 12px 0;}
+    .card-head{padding:14px 14px 10px;}
+    .card-body{padding:14px 14px 16px;}
+    .timer-display{font-size:22px; min-width:100px;}
+    .split-two{grid-template-columns:1fr;}
+    button{flex:1;}
+    .btn-group{width:100%;}
+    .log-section{padding:16px 12px 0;}
+    .entry-top{flex-direction:column; gap:2px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="clipboard-top"><div class="clip"></div></div>
+
+<header>
+  <div class="form-no">FORM NO. QA-08 · REV 2026</div>
+  <h1>App Testing Criteria — Field Session</h1>
+  <p>Run each check on-device, time it where it matters, and stamp a verdict. Every entry drops into the log below — export the whole ticket as CSV when the session wraps.</p>
+  <div class="meta-grid">
+    <div class="meta-field"><label>Tester</label><input id="testerName" placeholder="Name"></div>
+    <div class="meta-field"><label>Device / OS</label><input id="deviceInfo" placeholder="e.g. Tecno Spark, Android 13"></div>
+    <div class="meta-field"><label>Network</label><input id="networkInfo" placeholder="e.g. 3G, WiFi, offline"></div>
+    <div class="meta-field"><label>Location</label><input id="locationInfo" placeholder="e.g. Kumasi branch"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1 -->
+  <div class="card" data-id="1">
+    <div class="card-head">
+      <span class="num">01</span>
+      <h2>Submission time — how long does it take to submit a bill?</h2>
+    </div>
+    <div class="card-body">
+      <div class="timer-unit">
+        <div class="timer-row">
+          <div class="timer-display" data-display>00:00.0</div>
+          <div class="btn-group">
+            <button data-start class="btn-start">Start</button>
+            <button data-stop class="btn-stop" disabled>Stop</button>
+            <button data-reset class="btn-reset">Reset</button>
+          </div>
+        </div>
+      </div>
+      <textarea data-notes placeholder="Notes — bill type, line items, any hiccups..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card" data-id="2">
+    <div class="card-head">
+      <span class="num">02</span>
+      <h2>Automatic sync of bills — and time to sync if it fails on first try.</h2>
+    </div>
+    <div class="card-body">
+      <div class="timer-row">
+        <div class="timer-display" data-display>00:00.0</div>
+        <div class="btn-group">
+          <button data-start class="btn-start">Start</button>
+          <button data-stop class="btn-stop" disabled>Stop</button>
+          <button data-reset class="btn-reset">Reset</button>
+        </div>
+      </div>
+      <div class="stamp-row" data-verdict-group>
+        <button type="button" class="stamp" data-verdict="pass">Synced 1st try</button>
+        <button type="button" class="stamp" data-verdict="partial">Synced on retry</button>
+        <button type="button" class="stamp" data-verdict="fail">Manual sync req.</button>
+      </div>
+      <textarea data-notes placeholder="Notes — retry count, error shown, connection type..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card" data-id="3">
+    <div class="card-head">
+      <span class="num">03</span>
+      <h2>After a payment is recorded, how long until it goes through?</h2>
+    </div>
+    <div class="card-body">
+      <div class="timer-row">
+        <div class="timer-display" data-display>00:00.0</div>
+        <div class="btn-group">
+          <button data-start class="btn-start">Start</button>
+          <button data-stop class="btn-stop" disabled>Stop</button>
+          <button data-reset class="btn-reset">Reset</button>
+        </div>
+      </div>
+      <textarea data-notes placeholder="Notes — payment method, amount, confirmation type (SMS/in-app)..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card" data-id="4">
+    <div class="card-head">
+      <span class="num">04</span>
+      <h2>Does form length affect collection rate?</h2>
+    </div>
+    <div class="card-body">
+      <div class="stamp-row" data-verdict-group>
+        <button type="button" class="stamp" data-verdict="pass">No effect</button>
+        <button type="button" class="stamp" data-verdict="partial">Some drop-off</button>
+        <button type="button" class="stamp" data-verdict="fail">Clear deterrent</button>
+      </div>
+      <textarea data-notes placeholder="Notes — field count tested, which field caused hesitation..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card" data-id="5">
+    <div class="card-head">
+      <span class="num">05</span>
+      <h2>Submission time — tech-savvy user vs. naïve collector</h2>
+    </div>
+    <div class="card-body">
+      <div class="split-two">
+        <div class="timer-unit">
+          <div class="timer-label">Tech-savvy</div>
+          <div class="timer-display" data-display data-group="savvy">00:00.0</div>
+          <div class="btn-group">
+            <button data-start data-group="savvy" class="btn-start">Start</button>
+            <button data-stop data-group="savvy" class="btn-stop" disabled>Stop</button>
+            <button data-reset data-group="savvy" class="btn-reset">Reset</button>
+          </div>
+        </div>
+        <div class="timer-unit">
+          <div class="timer-label">Naïve collector</div>
+          <div class="timer-display" data-display data-group="naive">00:00.0</div>
+          <div class="btn-group">
+            <button data-start data-group="naive" class="btn-start">Start</button>
+            <button data-stop data-group="naive" class="btn-stop" disabled>Stop</button>
+            <button data-reset data-group="naive" class="btn-reset">Reset</button>
+          </div>
+        </div>
+      </div>
+      <textarea data-notes placeholder="Notes — where the naive collector got stuck, what needed explaining..."></textarea>
+      <button data-log data-dual="true" class="btn-log">Log this comparison</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card" data-id="6">
+    <div class="card-head">
+      <span class="num">06</span>
+      <h2>After recording a payment — auto-sync, or pending list first?</h2>
+    </div>
+    <div class="card-body">
+      <div class="stamp-row" data-verdict-group>
+        <button type="button" class="stamp" data-verdict="pass">Auto, no pending</button>
+        <button type="button" class="stamp" data-verdict="partial">Pending → synced</button>
+        <button type="button" class="stamp" data-verdict="fail">Stuck pending</button>
+      </div>
+      <textarea data-notes placeholder="Notes — how long it stayed pending, manual trigger needed?"></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card" data-id="7">
+    <div class="card-head">
+      <span class="num">07</span>
+      <h2>How long until the payment / delivery record reflects in the system?</h2>
+    </div>
+    <div class="card-body">
+      <div class="timer-row">
+        <div class="timer-display" data-display>00:00.0</div>
+        <div class="btn-group">
+          <button data-start class="btn-start">Start</button>
+          <button data-stop class="btn-stop" disabled>Stop</button>
+          <button data-reset class="btn-reset">Reset</button>
+        </div>
+      </div>
+      <textarea data-notes placeholder="Notes — which view/report you checked for the reflected record..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card" data-id="8">
+    <div class="card-head">
+      <span class="num">08</span>
+      <h2>Does the system auto-refresh itself after a payment record?</h2>
+    </div>
+    <div class="card-body">
+      <div class="stamp-row" data-verdict-group>
+        <button type="button" class="stamp" data-verdict="pass">Auto, no refresh</button>
+        <button type="button" class="stamp" data-verdict="partial">Needs manual pull</button>
+        <button type="button" class="stamp" data-verdict="fail">Needs restart</button>
+      </div>
+      <textarea data-notes placeholder="Notes — which screen, whether a refresh action was needed..."></textarea>
+      <button data-log class="btn-log">Log this run</button>
+      <div class="status-line" data-status></div>
+    </div>
+  </div>
+
+</main>
+
+<div class="tear"><span>✂ tear here — session log below</span><div class="line"></div></div>
+
+<div class="log-section">
+  <div class="log-head">
+    <h2>Session Log</h2>
+    <div class="log-actions">
+      <button class="clear-btn" id="clearLog">Clear</button>
+      <button class="export-btn" id="exportCsv">Export CSV</button>
+    </div>
+  </div>
+  <div id="logTableWrap">
+    <div class="empty-log">No entries logged yet. Run a check above and hit "Log this run".</div>
+  </div>
+</div>
+
+<footer>APP TEST BENCH · SESSION DATA STAYS IN THIS TAB — EXPORT BEFORE YOU CLOSE IT</footer>
+
+<script>
+(function(){
+  const log = [];
+
+  function fmt(ms){
+    const totalMs = Math.max(0, ms);
+    const m = Math.floor(totalMs / 60000);
+    const s = Math.floor((totalMs % 60000) / 1000);
+    const t = Math.floor((totalMs % 1000) / 100);
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + '.' + t;
+  }
+
+  document.querySelectorAll('.card').forEach(card => {
+    const timerGroups = {};
+    card.querySelectorAll('[data-display]').forEach(disp => {
+      const group = disp.getAttribute('data-group') || 'default';
+      timerGroups[group] = { elapsed: 0, running: false, startedAt: null, interval: null, display: disp };
+    });
+
+    function tick(group){
+      const t = timerGroups[group];
+      const now = Date.now();
+      t.display.textContent = fmt(t.elapsed + (now - t.startedAt));
+    }
+
+    card.querySelectorAll('[data-start]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.getAttribute('data-group') || 'default';
+        const t = timerGroups[group];
+        t.running = true;
+        t.startedAt = Date.now();
+        t.display.classList.add('running');
+        t.interval = setInterval(() => tick(group), 100);
+        btn.disabled = true;
+        const stopBtn = card.querySelector(`[data-stop][data-group="${group}"]`) || card.querySelector('[data-stop]:not([data-group])');
+        if (stopBtn) stopBtn.disabled = false;
+      });
+    });
+
+    card.querySelectorAll('[data-stop]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.getAttribute('data-group') || 'default';
+        const t = timerGroups[group];
+        if (!t.running) return;
+        clearInterval(t.interval);
+        t.elapsed += Date.now() - t.startedAt;
+        t.running = false;
+        t.display.classList.remove('running');
+        btn.disabled = true;
+        const startBtn = card.querySelector(`[data-start][data-group="${group}"]`) || card.querySelector('[data-start]:not([data-group])');
+        if (startBtn) startBtn.disabled = false;
+      });
+    });
+
+    card.querySelectorAll('[data-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.getAttribute('data-group') || 'default';
+        const t = timerGroups[group];
+        clearInterval(t.interval);
+        t.elapsed = 0;
+        t.running = false;
+        t.display.classList.remove('running');
+        t.display.textContent = '00:00.0';
+        const startBtn = card.querySelector(`[data-start][data-group="${group}"]`) || card.querySelector('[data-start]:not([data-group])');
+        const stopBtn = card.querySelector(`[data-stop][data-group="${group}"]`) || card.querySelector('[data-stop]:not([data-group])');
+        if (startBtn) startBtn.disabled = false;
+        if (stopBtn) stopBtn.disabled = true;
+      });
+    });
+
+    // stamp verdict buttons
+    const verdictGroup = card.querySelector('[data-verdict-group]');
+    let selectedVerdict = '';
+    if (verdictGroup){
+      verdictGroup.querySelectorAll('.stamp').forEach(stampBtn => {
+        stampBtn.addEventListener('click', () => {
+          verdictGroup.querySelectorAll('.stamp').forEach(b => b.classList.remove('sel-pass','sel-partial','sel-fail'));
+          const v = stampBtn.getAttribute('data-verdict');
+          stampBtn.classList.add('sel-' + v);
+          selectedVerdict = v;
+        });
+      });
+    }
+
+    const logBtn = card.querySelector('[data-log]');
+    if (logBtn){
+      logBtn.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        const title = card.querySelector('h2').textContent.trim();
+        const notes = (card.querySelector('[data-notes]') || {}).value || '';
+        const isDual = logBtn.getAttribute('data-dual') === 'true';
+
+        let timeStr = '—';
+        if (isDual){
+          const savvy = timerGroups['savvy'] ? timerGroups['savvy'].display.textContent : '—';
+          const naive = timerGroups['naive'] ? timerGroups['naive'].display.textContent : '—';
+          timeStr = `savvy ${savvy} / naive ${naive}`;
+        } else if (timerGroups['default']){
+          timeStr = timerGroups['default'].display.textContent;
+        }
+
+        const entry = {
+          time: new Date().toLocaleTimeString(),
+          criterion: `#${id} ${title}`,
+          duration: timeStr,
+          verdict: selectedVerdict || '',
+          notes: notes,
+          tester: document.getElementById('testerName').value || '—',
+          device: document.getElementById('deviceInfo').value || '—',
+          network: document.getElementById('networkInfo').value || '—',
+          location: document.getElementById('locationInfo').value || '—'
+        };
+        log.push(entry);
+        renderLog();
+
+        const status = card.querySelector('[data-status]');
+        if (status){
+          status.innerHTML = '<span class="ok">Logged ✓ ' + entry.time + '</span>';
+          setTimeout(() => { status.textContent = ''; }, 2500);
+        }
+      });
+    }
+  });
+
+  function verdictClass(v){
+    if (v === 'pass') return 'v-pass';
+    if (v === 'fail') return 'v-fail';
+    if (v === 'partial') return 'v-partial';
+    return 'v-none';
+  }
+  function verdictLabel(v){
+    if (v === 'pass') return 'Pass';
+    if (v === 'fail') return 'Fail';
+    if (v === 'partial') return 'Partial';
+    return '—';
+  }
+
+  function renderLog(){
+    const wrap = document.getElementById('logTableWrap');
+    if (log.length === 0){
+      wrap.innerHTML = '<div class="empty-log">No entries logged yet. Run a check above and hit "Log this run".</div>';
+      return;
+    }
+    wrap.innerHTML = log.slice().reverse().map(e => `
+      <div class="entry">
+        <div class="entry-top">
+          <span class="entry-crit">${escapeHtml(e.criterion)}</span>
+          <span class="entry-time">${escapeHtml(e.time)}</span>
+        </div>
+        <div class="entry-row">
+          <span><b>Duration:</b> ${escapeHtml(e.duration)}</span>
+          <span class="entry-verdict ${verdictClass(e.verdict)}">${verdictLabel(e.verdict)}</span>
+          <span><b>Tester:</b> ${escapeHtml(e.tester)}</span>
+          <span><b>Device:</b> ${escapeHtml(e.device)}</span>
+        </div>
+        ${e.notes ? `<div class="entry-notes">${escapeHtml(e.notes)}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+
+  document.getElementById('clearLog').addEventListener('click', () => {
+    if (log.length && !confirm('Clear all logged entries? This cannot be undone.')) return;
+    log.length = 0;
+    renderLog();
+  });
+
+  document.getElementById('exportCsv').addEventListener('click', () => {
+    if (log.length === 0){ alert('Nothing to export yet.'); return; }
+    const headers = ['Time','Criterion','Duration','Verdict','Tester','Device','Network','Location','Notes'];
+    const rows = log.map(e => [e.time, e.criterion, e.duration, verdictLabel(e.verdict), e.tester, e.device, e.network, e.location, e.notes]
+      .map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `app-test-session-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+})();
+</script>
+
+</body>
+</html>
